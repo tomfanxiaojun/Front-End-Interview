@@ -40,3 +40,6 @@ console.log(/\D/.test(str));
 */
 var str="apple";
 console.log(/\w/.test(str));
+
+var orgStr='abcDdabcddedddddf';
+console.log(orgStr.replace(/d+/gim,'9'))
