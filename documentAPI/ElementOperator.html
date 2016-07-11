@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <title>Element operator</title>
+</head>
+
+<body>
+    <script>
+    function addUl(count) {
+        var df = document.createDocumentFragment();
+        var ul = document.createElement("ul");
+        for (var i = 0; i < count; i++) {
+            var li = document.createElement("li");
+            li.textContent = "li-" + i;
+            ul.appendChild(li);
+        }
+        df.appendChild(ul);
+        document.body.appendChild(df)
+    }
+
+    function removeLi(index) {
+        var ul = document.getElementsByTagName('ul')[0];
+        var ulChild = [].slice.call(ul.children);
+        for (let i = 0; i < ulChild.length; i++) {
+            if (i == index) {
+                ul.removeChild(ulChild[i]);
+            }
+        }
+    }
+
+    function initUL(count) {
+        addUl(count);
+    }
+
+    function addLi(index) {
+        var ul = document.getElementsByTagName('ul')[0];
+        var newli = document.createElement('li');
+        newli.textContent = "new li";
+        var ulChild = [].slice.call(ul.children);
+        for (let i = 0; i < ulChild.length; i++) {
+            if (i == index) {
+                ul.insertBefore(newli, ulChild[i]);
+            }
+        }
+
+    }
+    function replace(index){
+    	  var ul = document.getElementsByTagName('ul')[0];
+        var newli = document.createElement('li');
+        newli.textContent = "repalce li";
+        var ulChild = [].slice.call(ul.children);
+        for (let i = 0; i < ulChild.length; i++) {
+            if (i == index) {
+                ul.replaceChild(newli, ulChild[i]);
+            }
+        }
+    }
+    </script>
+</body>
+<input type="button" onclick='initUL(10)' value='init'>
+<input type="button" onclick='removeLi(1)' value='delete'>
+<input type="button" onclick='addLi(1)' value='add'>
+<input type="button" onclick='replace(1)' value='replace'>
+
+</html>
