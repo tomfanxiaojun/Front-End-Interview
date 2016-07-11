@@ -1,0 +1,22 @@
+<html>
+
+<head>
+    <title>Document Fragment</title>
+</head>
+
+<body>
+    <ul></ul>
+    <script>
+    var docf = document.createDocumentFragment();
+    var ul = document.getElementsByTagName('ul')[0];
+    var browserList = ["Internet Explorer", "Mozilla Firefox", "Safari", "Chrome", "Opera"];
+    browserList.forEach(function(e) {
+        var li = document.createElement('li');
+        li.textContent = e;
+        docf.appendChild(li);
+    })
+    ul.appendChild(docf);
+    </script>
+</body>
+
+</html>

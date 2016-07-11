@@ -1,0 +1,28 @@
+<html>
+<head>
+	<title>getComputedStyle</title>
+	
+</head>
+<body>
+<style>
+ #elem-container{
+   position: absolute;
+   left:     100px;
+   top:      200px;
+   height:   100px;
+ }
+</style>
+
+<div id="elem-container">dummy</div>
+<div id="output"></div>  
+
+<script>
+  function getTheStyle(){
+    var elem = document.getElementById("elem-container");
+    var theCSSprop = window.getComputedStyle(elem,null).getPropertyValue("height");
+    document.getElementById("output").innerHTML = theCSSprop;
+   }
+  getTheStyle();
+</script>
+</body>
+</html>
