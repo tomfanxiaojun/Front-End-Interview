@@ -33,3 +33,4 @@ person.getName();
 person.getAge();
 person.getClassNo?person.getClassNo():console.log("getClassNo is not the Person method.")
 
+ 

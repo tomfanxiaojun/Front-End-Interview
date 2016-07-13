@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <title>Custom Event</title>
+</head>
+<style>
+.bt {
+    display: inline;
+    width: 100px;
+    height: 40px;
+    background: blue;
+    border: 1px solid red;
+    cursor: pointer;
+}
+</style>
+
+<body>
+    <div class="bt">Button</div>
+    <script>
+    var obj = document.querySelector('.bt');
+    var customEvent = new CustomEvent('btClick', {
+    	//当事件初始化时传递的数据.
+        detail: {
+            isCustom: true
+        },
+        //一个布尔值,表明该事件是否会冒泡.
+        bubbles: true,
+        //一个布尔值,表明该事件是否可以被取消.
+        cancelable: false
+    });
+    obj.addEventListener("btClick", function(e) {
+        alert(e.detail.isCustom)
+    });
+    obj.addEventListener('click', function() {
+        alert('i will dispatch the btclick custom event');
+        this.dispatchEvent(customEvent);
+    })
+    </script>
+</body>
+
+</html>
