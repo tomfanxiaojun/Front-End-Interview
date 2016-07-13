@@ -3,6 +3,14 @@
 可以返回匹配的DOM节点，需考虑浏览器兼容性和性能。http://www.cnblogs.com/coco1s/p/4029708.html
  */
 var query = function(selector) {
+    // ^ 是以什么开头
+    // \w 匹配任意来自基本拉丁字母表中的字母数字字符，还包括下划线。等价于 [A-Za-z0-9_]。
+    // (x)匹配 x 并且捕获匹配项。 这被称为捕获括号（capturing parentheses）。
+    // 例如，/(foo)/ 匹配且捕获 "foo bar." 中的 "foo"。
+    // 被匹配的子字符串可以在结果数组的元素 [1], ..., [n] 中找到，
+    // 或在被定义的 RegExp 对象的属性 $1, ..., $9 中找到。
+    // ? 的使用：http://www.cnblogs.com/graphics/archive/2010/06/02/1749707.html
+    // 问号可以表示重复前面内容的0次或一次，也就是要么不出现，要么出现一次。
     var reg = /^(#)?(\.)?(\w+)$/img;
     var regResult = reg.exec(selector);
     var result = [];

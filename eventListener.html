@@ -22,6 +22,20 @@
             obj.attachEvent('on' + type, cb);
         }
     }
+
+    function addEvent(elem,type,handler){
+        if(elem.addEventListener){
+            elem.addEventlistener(type,handler,false);
+        }else if(elem.attachEvent){
+            elem['temp'+type+handler]=handler;
+            elem[type+handler]=function{
+                elem['temp'+type+handler].apply(elem);
+            }
+            elem.attachEvent('on'+type,elem[type+handler]);
+        }else{
+            elem['on'+type]=handler
+        }
+    }
     </script>
 </body>
 
