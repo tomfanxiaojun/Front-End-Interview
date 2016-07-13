@@ -14,7 +14,7 @@ var QQ = (function() {
         }
     }
     // 定义静态方法
-    _qq.staticMethod=function(){
+    _qq.staticMethod=function(){         
     	console.log('This is a static method.');
     }
     //定义私有方法
