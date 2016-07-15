@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="dom-utils.js" type="text/javascript"></script>
+    <style>
+    .test {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border: 1px solid red;
+        background: blue;
+        cursor: pointer;
+        margin: 10px;
+    }
+    
+    .red-color {
+        color: red;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="test" id='first'>This is a div object.</div>
+    <div class="test">This is a div object.</div>
+    <p class="test">This is a p object.</p>
+    <div class="test">This is a div object.</div>
+    <input type="button" value="addClass" id="addClass">
+    <input type="button" value="removeClass" id="removeClass">
+    <input type="button" value="toggleClassFirst" id="toggleClassFirst">
+    <input type="button" value="toggleClassTag" id="toggleClassTag">
+    <input type="button" value="customEvent" id="customEvent">
+    <br>
+    <input type="text" id="input">
+    <input type="button" value="getValue" id="getValue">
+    <input type="button" value="setValue" id="setValue">
+    <br>
+    <div id="html">
+        <p>This is a p </p>
+    </div>
+    <input type="button" value="getHtml" id="getHtml">
+    <input type="button" value="setHtml" id="setHtml">
+    <br>
+    <div id="text">
+        <p>This is a p </p>
+    </div>
+    <input type="button" value="getText" id="getText">
+    <input type="button" value="setText" id="setText">
+    <script type="text/javascript">
+    $.addCusomEvens('onCustomEvent', {
+        id: 1,
+        name: 'ivan',
+        age: 27
+    });
+    $('#customEvent').on('onCustomEvent', (ev) => {
+        alert(JSON.stringify(ev.detail));
+    })
+    $('#addClass').on('click', () => {
+        $('.test').addClass('red-color');
+        $('#customEvent').trigger('onCustomEvent');
+    })
+    $('#removeClass').on('click', () => {
+        $('.test').removeClass('red-color');
+    })
+    $('#toggleClassFirst').on('click', () => {
+        $('#first').toggleClass('red-color');
+    })
+    $('#toggleClassTag').on('click', () => {
+        $('p').toggleClass('red-color');
+    })
+    $('#getValue').on('click', () => {
+        alert($('#input').val());
+    })
+    $('#setValue').on('click', () => {
+        $('#input').val('This is input');
+    })
+    $('#getHtml').on('click', () => {
+        alert($('#html').html());
+    })
+    $('#setHtml').on('click', () => {
+        $('#html').html(' <a href="www.baidu.com">baidu</a>');
+    })
+     $('#getText').on('click', () => {
+        alert($('#text').text());
+    })
+    $('#setText').on('click', () => {
+        $('#text').text(' Hello world');
+    })
+    </script>
+</body>
+
+</html>
