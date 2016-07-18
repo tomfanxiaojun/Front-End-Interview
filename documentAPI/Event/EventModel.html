@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>原生JavaScript事件详解-http://www.cnblogs.com/iyangyuan/p/4190773.html</title>
+    <style>
+    #outdiv {
+        background: red;
+        height: 100px;
+        cursor: pointer;
+    }
+    
+    p {
+        background: green;
+        display: inline-block;
+        width: 100px;
+        text-align: center;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    
+    table,
+    table tr td {
+        border: 1px solid gray;
+        cursor: pointer;
+    }
+    
+    div > div {
+        height: 128px;
+        width: 128px;
+    }
+    
+    #top {
+        background-color: red;
+    }
+    
+    #bottom {
+        background-color: blue;
+    }
+    
+    #text {
+        display: inline-block;
+        height: 100px;
+        width: 100px;
+        background: green;
+    }
+    
+    #menu {
+        display: inline-block;
+        height: 100px;
+        width: 100px;
+        background: gray;
+    }
+    #myMenu{
+    	display: inline-block;
+        height: 100px;
+        width: 100px;
+        background: #0EEC86;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="outdiv">
+        <p>Click Me</p>
+    </div>
+    <table>
+        <tr>
+            <td id="td-1">11</td>
+            <td id="td-2">12</td>
+            <td id="td-3">13</td>
+        </tr>
+        <tr>
+            <td id="td-4">21</td>
+            <td id="td-5">22</td>
+            <td id="td-6">23</td>
+        </tr>
+        <tr>
+            <td id="td-7">31</td>
+            <td id="td-8">32</td>
+            <td id="td-9">33</td>
+        </tr>
+    </table>
+    <div id="outer">
+        <div id="top"></div>
+        <div id="bottom"></div>
+    </div>
+    <a href="http://www.baidu.com">baidu</a>
+    <div id="text"></div>
+    <div id="menu"></div>
+    <div id="myMenu"></div>
+    <script>
+    var phases = {
+        1: 'capture',
+        2: 'target',
+        3: 'bubble'
+    };
+
+    var div = document.querySelector('div');
+    var p = document.querySelector('p');
+
+    div.addEventListener('click', callback, true);
+    p.addEventListener('click', callback, true);
+    div.addEventListener('click', callback, false);
+    p.addEventListener('click', callback, false);
+
+    function callback(event) {
+        var tag = event.currentTarget.tagName; //currentTarget：事件绑定的元素。
+        var phase = phases[event.eventPhase];
+        alert("Tag: '" + tag + "'. EventPhase: '" + phase + "'");
+        console.log("Tag: '" + tag + "'. EventPhase: '" + phase + "'");
+    }
+
+    var table = document.querySelector('table');
+    table.addEventListener('click', clicktable, true); //事件捕获
+
+    function clicktable(event) {
+        var target = getTarget(event); //target：触发事件的元素。        
+        if (target.tagName == 'TD') {
+            alert(target.id);
+        }
+    }
+
+    function getTarget(evt) { // 得到事件目标;
+        if (evt.target) {
+            return evt.target;
+        } else if (window.event.srcEleemnt) {
+            return window.event.srcElement;
+        }
+    }
+    document.getElementById("top").addEventListener("mouseover", overListener);
+    document.getElementById("top").addEventListener("mouseout", outListener);
+    document.getElementById("bottom").addEventListener("mouseover", overListener);
+
+    function outListener(event) {
+        //relatedTarget 这个属性可以在mouseover和mouseout事件中获取从哪里移入和从哪里移出的DOM对象;
+        //
+        var relatedTarget = getEarget(event);
+        console.log("exited " + event.target.id + " for " + relatedTarget.id);
+    }
+
+    function overListener(event) {
+        var relatedTarget = getEarget(event);
+        console.log("entered " + event.target.id + " from " + relatedTarget.id);
+    }
+    // IE提供了两组与之对应的属性:fromElement和toElement;
+    // 兼容函数
+    function getEarget(evt) {
+        var e = evt || window.event; // 得到事件对象;
+        if (e.srcElement) { // 如果支持srcElement,表示IE;
+            if (e.type == 'mouseover') { // 如果是over事件;
+                return e.fromElement; // 就使用from;
+            } else if (e.type == 'mouseout') { // 如果是out;
+                return e.toElement; // 就使用to;
+            }
+        } else if (e.relatedTarget) { // 如果支持relatedTarget,表示W3C;
+            return e.relatedTarget;
+        }
+    }
+    // 阻止默认事件的方法
+    document.querySelector('a').addEventListener('click', stopDefaultEvent)
+
+    function stopDefaultEvent(event) {
+        preDef(event);
+        alert('i have provent default event;')
+    }
+
+    // 一个超链接的默认行为就点击然后跳转到指定的页面;
+    // 那么阻止默认行为就可以屏蔽跳转的这种操作,而实现自定义操作;
+    // 取消事件默认行为还有一种不规范的做法,就是返回false;
+
+    // PS:虽然return false;可以实现这个功能,但有漏洞;
+    // 第一:代码必须写到最后,这样导致中间的代码执行后,有可能执行不到return false;
+    // 第二:return false写到最前那么之后的自定义操作就失败了;
+    // 解决方案:在最前面就阻止默认行为,并且后面还能执行代码;
+    function preDef(evt) { // 跨浏览器兼容阻止默认行为;
+        var e = evt || window.event;
+        if (e.preventDefault) {
+            e.preventDefault(); // W3C,阻止默认行为;
+        } else {
+            e.returnValue = false; // IE,阻止默认行为;
+        }
+    }
+    // 兼容IE和W3C的事件切换器函数;
+    function addEvent(obj, type, fn) { // 添加事件处理程序兼容;
+        if (obj.addEventListener) {
+            obj.addEventListener(type, fn);
+        } else if (obj.attachEvent) {
+            obj.attachEvent('on' + type, fn);
+        }
+    }
+
+    function removeEvent(obj, type, fn) { // 移除事件处理程序兼容;
+        if (obj.removeEventListener) {
+            obj.removeEventListener(type, fn);
+        }
+        esle
+        if (obj.detachEvent) {
+            obj.detachEvent('on' + type, fn);
+        }
+    }
+
+    function getTarget(evt) { // 得到事件目标;
+        if (evt.target) {
+            return evt.target;
+        } else if (window.event.srcEleemnt) {
+            return window.event.srcElement;
+        }
+    }
+    // 当我们右击网页的时候,会自动出现windows自带的菜单;
+    // 那么我们可以使用contextmenu事件来修改我们指定的菜单;但前提是把右击的默认行为取消;
+    addEvent(window, 'load', function() {
+        var text = document.getElementById('text');
+        addEvent(text, 'contextmenu', function(evt) { // 添加右键菜单事件处理程序;
+            var e = evt || window.event;
+            preDef(e); // 阻止默认行为函数;
+            var menu = document.getElementById('menu'); // 找到自定义的menu对象;
+            menu.style.left = e.clientX + 'px'; // 确定自定义menu在屏幕上的位置;
+            menu.style.top = e.clientX + 'px';
+            menu.style.visibility = 'visible'; // 设置自定义menu的属性为可见;
+            addEvent(document, 'click', function() { // 给document添加单击事件处理程序;
+                document.getElementById('myMenu').style.visibility = 'hidden'; //将自定义的menu隐藏;
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>
