@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Margin 叠加http://developer.51cto.com/art/201008/221940.htm</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .top {
+    	width: 100px;
+    	height: 100px;
+    	border:1px solid red;
+    	margin-top:20px; 
+        margin-bottom:60px;
+
+    }
+    .bottom{
+    	width: 100px;
+    	height:100px;
+    	border:1px solid green;
+    	margin-top: 50px;
+    }
+    .outer{
+        width: 200px;
+        height: 200px;
+        background: red;
+        margin-top:50px;
+        border:1px solid red;
+    }
+    .insider{
+        margin-top: 20px;
+        border:1px solid green;
+        width: 140px;
+        height: 140px;
+        background: green;
+    }
+    .outer-1{
+        width: 200px;
+        height: 200px;
+        background: red;
+        margin-top:50px;
+        border:1px solid red;
+    }
+    .insider-1{
+        margin: 60px 0px;
+    }
+    </style>
+    <script>
+    function getValue(){
+        var selector=document.querySelector('#selector').value;
+    	var obj=document.querySelector(selector);
+        var styles=window.getComputedStyle(obj,null);
+        var p=document.querySelector('#propertyName').value;
+        alert(p+"="+styles.getPropertyValue(p));
+    }
+    </script>
+</head>
+
+<body>
+    <div class="top"></div>
+    <div class="bottom">上下相邻的两个Div 的top 和bottom 的margin 取最大值</div>
+    <div class="outer">
+        <div class="insider">当一个元素包含在另一个元素中时（假设没有填充或边框将边界分隔开），它们的顶和/或底边界也发生叠加</div>
+    </div>
+    <div class="outer-1">
+        <div class="insider-1"></div>
+    </div>
+    Selector:
+    <input type="text" id="selector">
+    Property Name:
+    <input type="text" id="propertyName">
+    <input type="button" value="Show Value" onclick="getValue()" >
+</body>
+
+</html>

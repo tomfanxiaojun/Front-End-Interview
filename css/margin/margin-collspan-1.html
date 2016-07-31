@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Margin 叠加http://developer.51cto.com/art/201008/221940.htm</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+	#box{  
+		margin:10px;  
+		background-color:#d5d5d5;  
+	}  
+	p{  
+		margin:20px;  
+		background-color:#6699ff;  
+	}  
+    </style>
+    <script>
+    function getValue(){
+        var selector=document.querySelector('#selector').value;
+    	var obj=document.querySelector(selector);
+        var styles=window.getComputedStyle(obj,null);
+        var p=document.querySelector('#propertyName').value;
+        alert(p+"="+styles.getPropertyValue(p));
+    }
+    </script>
+</head>
+
+<body>
+     <div  id="box"> 
+       <p>Thisparagraphhasa20pxmargin</p>
+     </div> 
+     <div>
+     	边l界叠加的大多数问题可以通过添加透明边框或1px的补白来修复。
+
+		补充解决方案：
+
+		1.外层padding
+
+		2.透明边框border:1pxsolidtransparent;
+
+		3.绝对定位postion:absolute:
+
+		4.外层DIVoverflow:hidden;
+
+		5.内层DIV　加float:left;display:inline;
+
+		6.外层DIV有时会用到zoom:1;
+</div>
+    Selector:
+    <input type="text" id="selector">
+    Property Name:
+    <input type="text" id="propertyName">
+    <input type="button" value="Show Value" onclick="getValue()" >
+</body>
+
+</html>
