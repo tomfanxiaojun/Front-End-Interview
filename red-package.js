@@ -1,3 +1,5 @@
+Hi Zack，is convenienc
+
 /**
  * 面试问题：发一个随机红包，100块钱给10个人。每个人最多12块钱，最少6块钱。怎么分？
  * https://segmentfault.com/q/1010000006002081?utm_source=weekly&utm_medium=email&utm_campaign=email_weekly
