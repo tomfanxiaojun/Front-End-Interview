@@ -1,6 +1,7 @@
 'use strict'
 /*
 Slice 是浅复制
+arr.slice(begin,end),包含Begin不包含End
  */
 let arr=[{name:'ivan'},{name:'king'},{name:'anna'}];
 let newArr=arr.slice(1,2);

@@ -33,6 +33,8 @@
     }
 
     function addLi(index) {
+        //https://developer.mozilla.org/zh-CN/docs/Web/API/Element/insertAdjacentHTML
+        //el.insertAdjacentHTML('beforebegin', htmlString);
         var ul = document.getElementsByTagName('ul')[0];
         var newli = document.createElement('li');
         newli.textContent = "new li";
