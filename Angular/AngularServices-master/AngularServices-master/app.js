@@ -180,7 +180,7 @@ app.config(function(myProviderProvider) {
 app.controller('myDirectiveCtrl', function($scope) {
     $scope.naomi = { name: 'Naomi', address: '1600 Amphitheatre' };
     $scope.vojta = { name: 'Vojta', address: '3456 Somewhere Else' };
-    $scope.number="1111";
+    $scope.number = "1111";
 });
 
 //directives.js中定义myAttr  
@@ -202,15 +202,17 @@ app.directive('myAttr01', function() {
         //由结果可以看出来，controller先运行，link后运行，link和compile不兼容。
         restrict: 'E',
         template: 'Name: {{customerInfo.name}} Address: {{customerInfo.address}}<br>' +
-            'Name: {{vojta.name}} Address: {{vojta.address}} <br>'+
-            'Number:{{number}}',
+            'Name: {{vojta.name}} Address: {{vojta.address}} <br>',
         controller: function($scope, $element) {
             $scope.number = $scope.number + "22222 ";
         },
         link: function(scope, el, attr) {
+            //link的值是一个函数，用来定义指令的行为。从传入的参数中可以获取到当前元素，我们便可以拿当前元素开刀了
             scope.number = scope.number + "33333 ";
         },
         compile: function(element, attributes) {
+            // 由结果可以看出来，controller先运行，compile后运行，link不运行(link就是compile中的postLink)。
+            // 由结果可以看出来，controller先运行，link后运行，link和compile不兼容。compile改变dom,link事件的触发和绑定
             return {
                 pre: function preLink(scope, element, attributes) {
                     scope.number = scope.number + "44444 ";
@@ -222,5 +224,66 @@ app.directive('myAttr01', function() {
         }
     }
 });
+app.directive('fractionNum', function() {
+    //http://hudeyong926.iteye.com/blog/2073488
+    return {
+        link: function(scope, elements, attrs, controller) {
+            // //link的值是一个函数，用来定义指令的行为。从传入的参数中可以获取到当前元素，我们便可以拿当前元素开刀了
+            elements[0].onkeyup = function() {
+                if (isNaN(this.value) || this.value < 1 || this.value > 10) {
+                    this.style.borderColor = 'red';
+                } else {
+                    this.style.borderColor = '';
+                }
+            };
+        }
+    };
+});
+app.directive('log', function() {
+    return {
+        controller: function($scope, $element, $attrs, $transclude) {
+            console.log($attrs.log + ' (controller)');
+        },
+        compile: function compile(tElement, tAttributes) {
+            console.log(tAttributes.log + ' (compile)');
+            return {
+                pre: function preLink(scope, element, attributes) {
+                    console.log(attributes.log + ' (pre-link)');
+                },
+                post: function postLink(scope, element, attributes) {
+                    console.log(attributes.log + ' (post-link)');
+                }
+            };
+        },
+        link: function(scope, el, attrs) {
+            //link的值是一个函数，用来定义指令的行为。从传入的参数中可以获取到当前元素，我们便可以拿当前元素开刀了
+            console.log(attrs.log + ' (post-link)');
+        },
+    };
 
+});
 /*https://segmentfault.com/a/1190000002773689 Scope*/
+app.directive("scopeDirective", function() {
+    var obj = {
+        restrict: "AE",
+        scope: {
+            name: '@myName', //这是一个单项绑定的前缀标识符
+            //使用方法：在元素中使用属性，好比这样<div my-directive my-name="{{name}}"></div>，注意，属性的名字要用-将两个单词连接，因为是数据的单项绑定所以要通过使用{{}}来绑定数据。
+            age: '=', //这是一个双向数据绑定前缀标识符
+            //使用方法：在元素中使用属性，好比这样<div my-directive age="age"></div>,注意，数据的双向绑定要通过=前缀标识符实现，所以不可以使用{{}}。
+            changeAge: '&changeMyAge' //这是一个绑定函数方法的前缀标识符
+                //使用方法：在元素中使用属性，好比这样<div my-directive change-my-age="changeAge()"></div>，注意，属性的名字要用-将多个个单词连接。
+        },
+        replace: true,
+        template: "<div class='my-directive'>" +
+            "<h3>下面部分是我们创建的指令生成的</h3>" +
+            "我的名字是：<span ng-bind='name'></span><br/>" +
+            "我的年龄是：<span ng-bind='age'></span><br/>" +
+            "在这里修改名字：<input type='text' ng-model='name'><br/>" +
+            "<button ng-click='changeAge()'>修改年龄</button>" +
+            " </div>"
+    }
+    return obj;
+});
+
+/*http://www.angularjs.cn/A0a6  理解$watch ，$apply 和 $digest --- 理解数据绑定过程*/
