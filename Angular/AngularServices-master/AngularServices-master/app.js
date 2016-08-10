@@ -181,6 +181,15 @@ app.controller('myDirectiveCtrl', function($scope) {
     $scope.naomi = { name: 'Naomi', address: '1600 Amphitheatre' };
     $scope.vojta = { name: 'Vojta', address: '3456 Somewhere Else' };
     $scope.number = "1111";
+    $scope.watchvalue = 'old value';
+    var unwatch = $scope.$watch("watchvalue", function(newValue, oldValue) {
+        //do sth...
+        if (newValue=='hi') {
+            //当不需要的时候,及时移除watch
+            unwatch();
+        }
+        console.log('new Value:'+newValue)
+    });
 });
 
 //directives.js中定义myAttr  
@@ -211,6 +220,9 @@ app.directive('myAttr01', function() {
             scope.number = scope.number + "33333 ";
         },
         compile: function(element, attributes) {
+            //跟scope数据无关的操作放在compile阶段，它只执行一次。
+            //除了directive外其他地方，特别是controller里面不要操作dom， 尤其是绑定到scope后，便是灾难。
+            //改变以前使用JQuery那样以DOM为中心的思维，拥抱以数据为中心的思维。参见
             // 由结果可以看出来，controller先运行，compile后运行，link不运行(link就是compile中的postLink)。
             // 由结果可以看出来，controller先运行，link后运行，link和compile不兼容。compile改变dom,link事件的触发和绑定
             return {
@@ -287,3 +299,6 @@ app.directive("scopeDirective", function() {
 });
 
 /*http://www.angularjs.cn/A0a6  理解$watch ，$apply 和 $digest --- 理解数据绑定过程*/
+/**
+ * http://camnpr.com/javascript/1696.html 性能优化
+ */
