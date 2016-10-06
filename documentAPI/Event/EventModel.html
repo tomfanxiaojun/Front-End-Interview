@@ -62,6 +62,7 @@
 </head>
 
 <body>
+    http://www.jianshu.com/p/2de6c56d6d3f
     <div id="outdiv">
         <p>Click Me</p>
     </div>
@@ -100,7 +101,7 @@
     var div = document.querySelector('div');
     var p = document.querySelector('p');
 
-    div.addEventListener('click', callback, true);
+    div.addEventListener('click', callback, true);// 第三个默认为false,指事件在冒泡阶段执行
     p.addEventListener('click', callback, true);
     div.addEventListener('click', callback, false);
     p.addEventListener('click', callback, false);
@@ -113,7 +114,7 @@
     }
 
     var table = document.querySelector('table');
-    table.addEventListener('click', clicktable, true); //事件捕获
+    table.addEventListener('click', clicktable, false); //事件捕获
 
     function clicktable(event) {
         var target = getTarget(event); //target：触发事件的元素。        
@@ -180,6 +181,15 @@
             e.preventDefault(); // W3C,阻止默认行为;
         } else {
             e.returnValue = false; // IE,阻止默认行为;
+        }
+    }
+    // 阻止事件冒泡
+    function stopBubble(evt){
+        var e = evt || window.event;
+        if(e.cancelBubble){
+            e.cancelBubble=true;
+        }else{
+             e.stopPropagation();  
         }
     }
     // 兼容IE和W3C的事件切换器函数;
