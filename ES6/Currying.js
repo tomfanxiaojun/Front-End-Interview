@@ -9,7 +9,7 @@ console.log(curriedSum(40)(2));
 // => 42.
 
 const add2 = curriedSum(2); 
-console.log(JSON.stringify(add2))
+console.log(add2)
 // (b) => 2 + b
 
 console.log(add2(10));

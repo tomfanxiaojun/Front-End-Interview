@@ -5,7 +5,7 @@ caller是返回一个对函数的引用，该函数调用了当前函数；
 callee是返回正在被执行的function函数，也就是所指定的function对象的正文。
  */
 function a() {
-    console.log(arguments.callee);
+    console.log('========'+arguments.callee);
 }
 
 function b() {
