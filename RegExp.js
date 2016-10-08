@@ -26,3 +26,5 @@ var str='abcffffssdfffddsssj';
 console.log(/^abc|dd$/.test(str));
 
 
+
+
