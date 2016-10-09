@@ -1,3 +1,4 @@
+//http://blog.xieliqun.com/2016/08/14/arguments/
 /*
 26.Javascript中callee和caller的作用？
 答案：
@@ -33,3 +34,25 @@ function fn(n) {
     }
 }
 console.log(fn(3))
+
+function callerTest(){
+
+    if(callerTest.caller){
+        var caller = callerTest.caller.toString();
+        console.log(caller);
+    }else{
+        console.log("no caller")
+    }
+}
+
+function handler(){
+    callerTest();
+}
+
+function handlerToHandler(){
+    handler();
+}
+
+callerTest();        //no caller
+handler();           //返回调用者handler函数
+handlerToHandler();  //返回调用者handler函数

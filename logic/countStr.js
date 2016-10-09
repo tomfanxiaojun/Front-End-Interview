@@ -32,7 +32,7 @@ function countStr(str) {
     return result;
 }
 
-var str = 'a';
+var str = 'aabb';
 console.log(countStr(str));
 
 

@@ -15,7 +15,11 @@ var s = { name: 'ivan', age: 27, company: {name: 'epam', address: 'shenzhen' } }
 var t = s.clone(); 
 var sArr=[1,2,3,4,s];
 var tArr=sArr.clone();
-//console.log(tArr)
+console.log(tArr)
+console.log(sArr)
+tArr[0]=99;
+console.log(tArr)
+console.log(sArr)
 
  
 
