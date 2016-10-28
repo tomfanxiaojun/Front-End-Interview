@@ -26,5 +26,32 @@ var str='abcffffssdfffddsssj';
 console.log(/^abc|dd$/.test(str));
 
 
+let str='1,988.3'
+str=str.replace(/,/gim,'');
+console.log(str);
+console.log(/^(-?\d+)(\.\d+)?$/.test(str));
+
+let sdate='2016-10-5';
+// console.log(/^\d{4}\-\d{1,2}-\d{1,2}$/.test(sdate));
+
+console.log(/^\d{4}[-,/]\d{1,2}[-,/]\d{1,2}$/.test(sdate));
+
+let sdate01='2016/10/5';
+
+
+
+console.log(/^\d{4}[-,/]\d{1,2}[-,/]\d{1,2}$/.test(sdate01));
+
+
+//let s='-1,11---22/44.34'.toUpperCase();
+let s='n/a'.toUpperCase();
+
+s=s.replace(/[\,.,\-,/]/gim,'');
+console.log(s);
+console.log(/^(-?\d+)$/.test(s));
+
+
+
+
 
 

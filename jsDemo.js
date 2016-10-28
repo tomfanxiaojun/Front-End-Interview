@@ -2,7 +2,30 @@
 /*
 44 个 Javascript 变态题解析 (上)
  */
+//
+let str='1,988.3'
+str=str.replace(/,/gim,'');
+console.log(str);
+console.log(/^(-?\d+)(\.\d+)?$/.test(str));
 
-var ary = Array(3);
-ary[0]=2
-console.log(ary.map(function(elem) { return '1'; }));
+let sdate='2016-10-5';
+// console.log(/^\d{4}\-\d{1,2}-\d{1,2}$/.test(sdate));
+
+console.log(/^\d{4}[-,/]\d{1,2}[-,/]\d{1,2}$/.test(sdate));
+
+let sdate01='2016/10/5';
+
+
+
+console.log(/^\d{4}[-,/]\d{1,2}[-,/]\d{1,2}$/.test(sdate01));
+
+
+//let s='-1,11---22/44.34'.toUpperCase();
+let s='n/a'.toUpperCase();
+
+s=s.replace(/[\,.,\-,/]/gim,'');
+console.log(s);
+console.log(/^(-?\d+)$/.test(s));
+
+
+ 
