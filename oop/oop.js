@@ -4,12 +4,18 @@
  */
 function Dog(name) {
     this.name = name;
-    this.wow = function() {
-        console.log(`i am ${this.name},wow wow.`);
-    }
-    this.yelp = function() {
-        console.log(`Master,i am hunger,i want bone.`);
-    }
+    // this.wow = function() {
+    //     console.log(`i am ${this.name},wow wow.`);
+    // }
+    // this.yelp = function() {
+    //     console.log(`Master,i am hunger,i want bone.`);
+    // }
+}
+Dog.prototype.wow=function(){
+     console.log(`i am ${this.name},wow wow.`);
+}
+Dog.prototype.yelp=function(){
+    console.log(`Master,i am hunger,i want bone.`);
 }
 /*
 小芒和小贤一样，原来也是一条可爱的小狗，可是突然有一天疯了(MadDog)，
@@ -26,6 +32,7 @@ MadDog.prototype.crazyWow = function() {
     setInterval(function() {
         console.log('i am mad dog ,so i wow always')
     }, 500)
+
 }
 var xiaomang = new MadDog('小忙');
 xiaomang.wow();
@@ -33,4 +40,4 @@ xiaomang.yelp();
 xiaomang.crazyWow();
 var xiaoxian = new Dog("小闲");
 xiaoxian.wow();
-xiaoxian.crazyWow();
+// xiaoxian.crazyWow();
