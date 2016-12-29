@@ -1,0 +1,17 @@
+{
+  "name": "asyncdeml",
+  "version": "1.0.0",
+  "description": "",
+  "main": "promise-demo-1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "hget": "^3.0.1",
+    "marked": "^0.3.6",
+    "marked-terminal": "^2.0.0",
+    "request": "^2.78.0"
+  }
+}

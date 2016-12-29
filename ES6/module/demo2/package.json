@@ -1,0 +1,27 @@
+{
+  "name": "angular2-starter",
+  "author": "Dan Wahlin",
+  "version": "0.9.5",
+  "repository": "https://github.com/danwahlin/angular2-jumpstart",
+  "scripts": {
+    "postinstall": "typings install",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "bundle": "node bundle.js",
+    "bundle:prod": "node bundle.js --prod",
+    "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
+    "typings": "typings"
+  },
+  "license": "ISC",
+  "dependencies": { 
+    "systemjs": "0.19.27"    
+  },
+  "devDependencies": {
+    "concurrently": "^2.0.0",
+    "lite-server": "^2.2.0",
+    "typescript": "1.8.10",
+    "typings": "^1.3.3",
+    "systemjs-builder": "^0.15.30",
+    "yargs": "^5.0.0"
+  }
+}

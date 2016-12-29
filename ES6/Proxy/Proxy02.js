@@ -1,6 +1,7 @@
 /*
 http://www.w3cplus.com/javascript/use-cases-for-es6-proxies.html
  */
+// 校验属性
 function createValidator(target, validator) {
     return new Proxy(target, {
         _validator: validator,
@@ -24,7 +25,7 @@ const personValidators = {
         return typeof val === 'string';
     },
     age(val) {    	
-        return typeof val === 'number' && val > 18;
+        return typeof val === 'number' && val > 18 && val < 100;
     }
 }
 class Person {
@@ -42,7 +43,8 @@ const bill = new Person('Bill', 25);
 // bill.age = 'Bill';
 // bill.age = 15;
 // bill.sex='M';
+
 // 正确的操作
 bill.name='ivan';
-bill.age=19;
+bill.age=190;
 

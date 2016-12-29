@@ -8,7 +8,7 @@ var testFoo = function(time, value) {
 };
 var tasks = {
   task1: function() {
-    return testFoo(1, 2);
+    return testFoo(11, 2);
   },
   task2: function() {
     return testFoo(1.3, 3);
