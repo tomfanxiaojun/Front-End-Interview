@@ -26,7 +26,7 @@ function Person(name) {
     this.name = name;
     this.show = function() {
         console.log("姓名:" + this.name);
-        console.log(this);
+        //console.log(this);
     }
 }
 var p = new Person("Person");
@@ -34,10 +34,10 @@ obj.ftn01(p);
 
 obj.ftn02(function() {
     console.log(this.name);
-    console.log(this);
+    //console.log(this);
 });
 
 obj.ftn03(function() {
     console.log(this.name);
-    console.log(this);
+    //console.log(this);
 });

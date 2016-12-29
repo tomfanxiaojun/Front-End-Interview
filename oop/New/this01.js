@@ -8,7 +8,7 @@ var obj = {
     job: "Software",
     show: function() {
         console.log("Name:" + this.name + ";Job:" + this.job);
-        console.log(this); // Object { name="sharpxiajun", job="Software", show=function()}
+        //console.log(this); // Object { name="sharpxiajun", job="Software", show=function()}
     }
 };
 var otherObj = new Object();
@@ -20,3 +20,5 @@ otherObj.show = function() {
 };
 obj.show(); //Name:sharpxiajun;Job:Software
 otherObj.show(); //Name:xtq;Job:good
+var show=obj.show;
+show()
