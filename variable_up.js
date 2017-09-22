@@ -8,7 +8,7 @@ function func(){
 	var a=15;
 	console.log(a);
 }
-//func();
+func();
 
 //等价于：
 function func01(){
@@ -31,4 +31,4 @@ function func02(){
 	console.log(a);//15
 	console.log(window.a);// 123
 }
-func02();
+//func02();
