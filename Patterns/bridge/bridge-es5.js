@@ -1,4 +1,5 @@
 //refs:http://www.codingserf.com/index.php/2015/05/javascript-design-patterns-bridge/
+// 桥接模式应该是“把抽象概念和具体实现分离开来，让这两部分可以完全独立地变化”
 var RemoteControl = function(tv) {
     this.tv = tv;
 
