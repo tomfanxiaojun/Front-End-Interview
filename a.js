@@ -24,3 +24,4 @@ console.log(t2.value);
 t2.value.age =44
 console.log(t1.value);
 console.log(t2.value);
+// add comments.
