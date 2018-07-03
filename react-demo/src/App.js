@@ -6,7 +6,8 @@ class Components extends React.Component {
 
   constructor(props={name: 'ivan', age: 24}) {
     super(props);
-    this.state = {}
+    this.state = {
+    }
   }
   componentWillMount() {
     console.log("实例化：componentWillMount")
@@ -35,6 +36,9 @@ class Components extends React.Component {
     }
     return (
       <div>
+        <span key={this.props.count}>
+            {this.props.count}
+        </span>;
         <br />
         请查看下面的console
         <br />
@@ -44,24 +48,27 @@ class Components extends React.Component {
   }
 }
 Components.defaultProps = {
-  text: "hello word",
+  count: 0,
 }
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      count: 0
+    }
   }
   refresh() {
     return (e) => {
       this.setState({
         reRender: true,
+        count: this.state.count+1
       })
     }
   }
   render() {
     return (
       <div>
-        <Components reRender={this.state.reRender} />
+        <Components reRender={this.state.reRender} count={this.state.count}/>
         <button onClick={this.refresh()}>
           更新Component
         </button>
