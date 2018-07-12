@@ -13,8 +13,10 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/Front-End-Interview\\ES6\\Promise\\Promise-1.js"
+      "name": "Koa",
+      "koa": "${workspaceFolder}/NodeJs/koa/koa/examples/pwa/app.js",
+      "express": "${workspaceFolder}/NodeJs/express/express/examples/hello-world/index.js",
+      "program": "${workspaceFolder}/NodeJs/express/express/examples/hello-world/index.js"
     }
   ]
 }
