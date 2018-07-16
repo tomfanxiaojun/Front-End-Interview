@@ -10,47 +10,11 @@ var compose = require('koa-compose');
 var HttpError = require('http-errors');
 var methods = require('methods');
 var Layer = require('./layer');
-
-/**
- * @module koa-router
- */
-
 module.exports = Router;
-
-/**
- * Create a new router.
- *
- * @example
- *
- * Basic usage:
- *
- * ```javascript
- * var Koa = require('koa');
- * var Router = require('koa-router');
- *
- * var app = new Koa();
- * var router = new Router();
- *
- * router.get('/', (ctx, next) => {
- *   // ctx.router available
- * });
- *
- * app
- *   .use(router.routes())
- *   .use(router.allowedMethods());
- * ```
- *
- * @alias module:koa-router
- * @param {Object=} opts
- * @param {String=} opts.prefix prefix router paths
- * @constructor
- */
-
 function Router(opts) {
   if (!(this instanceof Router)) {
     return new Router(opts);
   }
-
   this.opts = opts || {};
   this.methods = this.opts.methods || [
     'HEAD',
@@ -65,129 +29,7 @@ function Router(opts) {
   this.params = {};
   this.stack = [];
 };
-
-/**
- * Create `router.verb()` methods, where *verb* is one of the HTTP verbs such
- * as `router.get()` or `router.post()`.
- *
- * Match URL patterns to callback functions or controller actions using `router.verb()`,
- * where **verb** is one of the HTTP verbs such as `router.get()` or `router.post()`.
- *
- * Additionaly, `router.all()` can be used to match against all methods.
- *
- * ```javascript
- * router
- *   .get('/', (ctx, next) => {
- *     ctx.body = 'Hello World!';
- *   })
- *   .post('/users', (ctx, next) => {
- *     // ...
- *   })
- *   .put('/users/:id', (ctx, next) => {
- *     // ...
- *   })
- *   .del('/users/:id', (ctx, next) => {
- *     // ...
- *   })
- *   .all('/users/:id', (ctx, next) => {
- *     // ...
- *   });
- * ```
- *
- * When a route is matched, its path is available at `ctx._matchedRoute` and if named,
- * the name is available at `ctx._matchedRouteName`
- *
- * Route paths will be translated to regular expressions using
- * [path-to-regexp](https://github.com/pillarjs/path-to-regexp).
- *
- * Query strings will not be considered when matching requests.
- *
- * #### Named routes
- *
- * Routes can optionally have names. This allows generation of URLs and easy
- * renaming of URLs during development.
- *
- * ```javascript
- * router.get('user', '/users/:id', (ctx, next) => {
- *  // ...
- * });
- *
- * router.url('user', 3);
- * // => "/users/3"
- * ```
- *
- * #### Multiple middleware
- *
- * Multiple middleware may be given:
- *
- * ```javascript
- * router.get(
- *   '/users/:id',
- *   (ctx, next) => {
- *     return User.findOne(ctx.params.id).then(function(user) {
- *       ctx.user = user;
- *       next();
- *     });
- *   },
- *   ctx => {
- *     console.log(ctx.user);
- *     // => { id: 17, name: "Alex" }
- *   }
- * );
- * ```
- *
- * ### Nested routers
- *
- * Nesting routers is supported:
- *
- * ```javascript
- * var forums = new Router();
- * var posts = new Router();
- *
- * posts.get('/', (ctx, next) => {...});
- * posts.get('/:pid', (ctx, next) => {...});
- * forums.use('/forums/:fid/posts', posts.routes(), posts.allowedMethods());
- *
- * // responds to "/forums/123/posts" and "/forums/123/posts/123"
- * app.use(forums.routes());
- * ```
- *
- * #### Router prefixes
- *
- * Route paths can be prefixed at the router level:
- *
- * ```javascript
- * var router = new Router({
- *   prefix: '/users'
- * });
- *
- * router.get('/', ...); // responds to "/users"
- * router.get('/:id', ...); // responds to "/users/:id"
- * ```
- *
- * #### URL parameters
- *
- * Named route parameters are captured and added to `ctx.params`.
- *
- * ```javascript
- * router.get('/:category/:title', (ctx, next) => {
- *   console.log(ctx.params);
- *   // => { category: 'programming', title: 'how-to-node' }
- * });
- * ```
- *
- * The [path-to-regexp](https://github.com/pillarjs/path-to-regexp) module is
- * used to convert paths to regular expressions.
- *
- * @name get|put|post|patch|delete|del
- * @memberof module:koa-router.prototype
- * @param {String} path
- * @param {Function=} middleware route middleware(s)
- * @param {Function} callback route callback
- * @returns {Router}
- */
-
-methods.forEach(function (method) {
+ methods.forEach(function (method) {
   Router.prototype[method] = function (name, path, middleware) {
     var middleware;
 
@@ -206,40 +48,8 @@ methods.forEach(function (method) {
     return this;
   };
 });
-
 // Alias for `router.delete()` because delete is a reserved word
 Router.prototype.del = Router.prototype['delete'];
-
-/**
- * Use given middleware.
- *
- * Middleware run in the order they are defined by `.use()`. They are invoked
- * sequentially, requests start at the first middleware and work their way
- * "down" the middleware stack.
- *
- * @example
- *
- * ```javascript
- * // session middleware will run before authorize
- * router
- *   .use(session())
- *   .use(authorize());
- *
- * // use middleware only with given path
- * router.use('/users', userAuth());
- *
- * // or with an array of paths
- * router.use(['/users', '/admin'], userAuth());
- *
- * app.use(router.routes());
- * ```
- *
- * @param {String=} path
- * @param {Function} middleware
- * @param {Function=} ...
- * @returns {Router}
- */
-
 Router.prototype.use = function () {
   var router = this;
   var middleware = Array.prototype.slice.call(arguments);
@@ -279,20 +89,6 @@ Router.prototype.use = function () {
 
   return this;
 };
-
-/**
- * Set the path prefix for a Router instance that was already initialized.
- *
- * @example
- *
- * ```javascript
- * router.prefix('/things/:thing_id')
- * ```
- *
- * @param {String} prefix
- * @returns {Router}
- */
-
 Router.prototype.prefix = function (prefix) {
   prefix = prefix.replace(/\/$/, '');
 
@@ -304,16 +100,9 @@ Router.prototype.prefix = function (prefix) {
 
   return this;
 };
-
-/**
- * Returns router middleware which dispatches a route matching the request.
- *
- * @returns {Function}
- */
-
 Router.prototype.routes = Router.prototype.middleware = function () {
   var router = this;
-
+  debugger
   var dispatch = function dispatch(ctx, next) {
     debug('%s %s', ctx.method, ctx.path);
 
@@ -347,7 +136,7 @@ Router.prototype.routes = Router.prototype.middleware = function () {
       });
       return memo.concat(layer.stack);
     }, []);
-
+    debugger
     return compose(layerChain)(ctx, next);
   };
 
@@ -355,50 +144,6 @@ Router.prototype.routes = Router.prototype.middleware = function () {
 
   return dispatch;
 };
-
-/**
- * Returns separate middleware for responding to `OPTIONS` requests with
- * an `Allow` header containing the allowed methods, as well as responding
- * with `405 Method Not Allowed` and `501 Not Implemented` as appropriate.
- *
- * @example
- *
- * ```javascript
- * var Koa = require('koa');
- * var Router = require('koa-router');
- *
- * var app = new Koa();
- * var router = new Router();
- *
- * app.use(router.routes());
- * app.use(router.allowedMethods());
- * ```
- *
- * **Example with [Boom](https://github.com/hapijs/boom)**
- *
- * ```javascript
- * var Koa = require('koa');
- * var Router = require('koa-router');
- * var Boom = require('boom');
- *
- * var app = new Koa();
- * var router = new Router();
- *
- * app.use(router.routes());
- * app.use(router.allowedMethods({
- *   throw: true,
- *   notImplemented: () => new Boom.notImplemented(),
- *   methodNotAllowed: () => new Boom.methodNotAllowed()
- * }));
- * ```
- *
- * @param {Object=} options
- * @param {Boolean=} options.throw throw error instead of setting status and header
- * @param {Function=} options.notImplemented throw the returned value in place of the default NotImplemented error
- * @param {Function=} options.methodNotAllowed throw the returned value in place of the default MethodNotAllowed error
- * @returns {Function}
- */
-
 Router.prototype.allowedMethods = function (options) {
   options = options || {};
   var implemented = this.methods;
@@ -453,18 +198,6 @@ Router.prototype.allowedMethods = function (options) {
     });
   };
 };
-
-/**
- * Register route with all methods.
- *
- * @param {String} name Optional.
- * @param {String} path
- * @param {Function=} middleware You may also pass multiple middleware.
- * @param {Function} callback
- * @returns {Router}
- * @private
- */
-
 Router.prototype.all = function (name, path, middleware) {
   var middleware;
 
@@ -482,31 +215,6 @@ Router.prototype.all = function (name, path, middleware) {
 
   return this;
 };
-
-/**
- * Redirect `source` to `destination` URL with optional 30x status `code`.
- *
- * Both `source` and `destination` can be route names.
- *
- * ```javascript
- * router.redirect('/login', 'sign-in');
- * ```
- *
- * This is equivalent to:
- *
- * ```javascript
- * router.all('/login', ctx => {
- *   ctx.redirect('/sign-in');
- *   ctx.status = 301;
- * });
- * ```
- *
- * @param {String} source URL or route name.
- * @param {String} destination URL or route name.
- * @param {Number=} code HTTP status code (default: 301).
- * @returns {Router}
- */
-
 Router.prototype.redirect = function (source, destination, code) {
   // lookup source route by name
   if (source[0] !== '/') {
@@ -523,17 +231,6 @@ Router.prototype.redirect = function (source, destination, code) {
     ctx.status = code || 301;
   });
 };
-
-/**
- * Create and register a route.
- *
- * @param {String} path Path string.
- * @param {Array.<String>} methods Array of HTTP verbs.
- * @param {Function} middleware Multiple middleware also accepted.
- * @returns {Layer}
- * @private
- */
-
 Router.prototype.register = function (path, methods, middleware, opts) {
   opts = opts || {};
 
@@ -572,14 +269,6 @@ Router.prototype.register = function (path, methods, middleware, opts) {
 
   return route;
 };
-
-/**
- * Lookup route with given `name`.
- *
- * @param {String} name
- * @returns {Layer|false}
- */
-
 Router.prototype.route = function (name) {
   var routes = this.stack;
 
@@ -591,42 +280,6 @@ Router.prototype.route = function (name) {
 
   return false;
 };
-
-/**
- * Generate URL for route. Takes a route name and map of named `params`.
- *
- * @example
- *
- * ```javascript
- * router.get('user', '/users/:id', (ctx, next) => {
- *   // ...
- * });
- *
- * router.url('user', 3);
- * // => "/users/3"
- *
- * router.url('user', { id: 3 });
- * // => "/users/3"
- *
- * router.use((ctx, next) => {
- *   // redirect to named route
- *   ctx.redirect(ctx.router.url('sign-in'));
- * })
- *
- * router.url('user', { id: 3 }, { query: { limit: 1 } });
- * // => "/users/3?limit=1"
- *
- * router.url('user', { id: 3 }, { query: "limit=1" });
- * // => "/users/3?limit=1"
- * ```
- *
- * @param {String} name route name
- * @param {Object} params url parameters
- * @param {Object} [options] options parameter
- * @param {Object|String} [options.query] query options
- * @returns {String|Error}
- */
-
 Router.prototype.url = function (name, params) {
   var route = this.route(name);
 
@@ -637,17 +290,6 @@ Router.prototype.url = function (name, params) {
 
   return new Error("No route found for name: " + name);
 };
-
-/**
- * Match given `path` and return corresponding routes.
- *
- * @param {String} path
- * @param {String} method
- * @returns {Object.<path, pathAndMethod>} returns layers that matched path and
- * path and method.
- * @private
- */
-
 Router.prototype.match = function (path, method) {
   var layers = this.stack;
   var layer;
@@ -674,7 +316,6 @@ Router.prototype.match = function (path, method) {
 
   return matched;
 };
-
 /**
  * Run middleware for named route parameters. Useful for auto-loading or
  * validation.
@@ -712,21 +353,6 @@ Router.prototype.param = function (param, middleware) {
   });
   return this;
 };
-
-/**
- * Generate URL from url pattern and given `params`.
- *
- * @example
- *
- * ```javascript
- * var url = Router.url('/users/:id', {id: 1});
- * // => "/users/1"
- * ```
- *
- * @param {String} path url pattern
- * @param {Object} params url parameters
- * @returns {String}
- */
 Router.url = function (path, params) {
     var args = Array.prototype.slice.call(arguments, 1);
     return Layer.prototype.url.apply({ path: path }, args);
