@@ -31,10 +31,16 @@ router.get('/',async (ctx, next) => {
   };
 })
 router.get('/a',async (ctx, next) => {
-  ctx.body = 'Index Page';
-  ctx.response.body = {
-    status: '200'
-  };
+  ctx.body = 'Index Page A';
+  // ctx.response.body = {
+  //   status: '200'
+  // };
+})
+router.get('/b',async (ctx, next) => {
+  ctx.body = 'Index Page B';
+  // ctx.response.body = {
+  //   status: '200'
+  // };
 })
 app.use(router.routes());
 app.listen(port, () => {
