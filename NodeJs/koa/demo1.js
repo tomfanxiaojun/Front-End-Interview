@@ -1,28 +1,36 @@
-var koa = require('koa');
-var app = koa();
+const koa = require('./koa/index');
+const Router = require('./koa-router/lib/router');
+const koaBody = require('koa-body');
 
+const app = new koa();
+const port = process.env.PORT || 3000;
+const router = new Router();
 // x-response-time
-
-app.use(function *(next){
+app.use(async (ctx, next) =>{
   var start = new Date;
-  yield next;
+  await next();
   var ms = new Date - start;
-  this.set('X-Response-Time', ms + 'ms');
+  ctx.set('X-Response-Time', ms + 'ms');
 });
-
 // logger
-
-app.use(function *(next){
+app.use(async (ctx, next) =>{
   var start = new Date;
-  yield next;
+  await next();
   var ms = new Date - start;
-  console.log('%s %s - %s', this.method, this.url, ms);
+  console.log('%s %s - %s', ctx.method, ctx.url, ms);
 });
-
 // response
-
-app.use(function *(){
-  this.body = 'Hello World';
+app.use(async (ctx, next) =>{
+  ctx.body = 'Hello World';
+  await next();
 });
-
-app.listen(3000);
+router.get('/','abc', async (ctx, next) => {
+  ctx.body = 'Index Page';
+  ctx.response.body = {
+    status: '200'
+  };
+})
+app.use(router.routes());
+app.listen(port, () => {
+  console.log(`listen on port: ${port}`);
+});

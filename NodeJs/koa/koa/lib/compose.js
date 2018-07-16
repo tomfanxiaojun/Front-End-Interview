@@ -38,10 +38,12 @@ function compose (middleware) {
       index = i
       let fn = middleware[i]
       if (i === middleware.length) fn = next
+      // 如果是最后一个中间件，就直接resolve,
       if (!fn) return Promise.resolve()
       try {
         // 最重要的逻辑， dispatch.bind(null, i + 1) 相当于next,下一个要执行的中间件
-
+        // 将上下文context 作为第一个参数，传递给中间件，中间件数组中得下一个中间件，
+        // 作为第二个参数，就是next.
         return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
       } catch (err) {
         return Promise.reject(err)

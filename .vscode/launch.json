@@ -14,9 +14,10 @@
       "type": "node",
       "request": "launch",
       "name": "Koa",
+      "koa1": "${workspaceFolder}/NodeJs/koa/demo1.js",
       "koa": "${workspaceFolder}/NodeJs/koa/koa/examples/pwa/app.js",
       "express": "${workspaceFolder}/NodeJs/express/express/examples/hello-world/index.js",
-      "program": "${workspaceFolder}/NodeJs/express/express/examples/hello-world/index.js"
+      "program": "${workspaceFolder}/NodeJs/koa/demo1.js"
     }
   ]
 }

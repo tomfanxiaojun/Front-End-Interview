@@ -1,0 +1,17 @@
+{
+  "name": "koa-learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "demo1.js",
+  "dependencies": {
+    "koa": "^2.2.0"
+  },
+  "devDependencies": {
+    "koa-body": "^4.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
