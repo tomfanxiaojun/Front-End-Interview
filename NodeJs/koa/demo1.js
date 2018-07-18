@@ -26,9 +26,9 @@ app.use(async (ctx, next) =>{
 });
 router.get('/',async (ctx, next) => {
   ctx.body = 'Index Page';
-  ctx.response.body = {
-    status: '200'
-  };
+  // ctx.response.body = {
+  //   status: '200'
+  // };
 })
 router.get('/a',async (ctx, next) => {
   ctx.body = 'Index Page A';

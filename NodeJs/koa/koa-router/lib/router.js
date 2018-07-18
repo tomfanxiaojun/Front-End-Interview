@@ -11,6 +11,7 @@ var HttpError = require('http-errors');
 var methods = require('methods');
 var Layer = require('./layer');
 module.exports = Router;
+
 function Router(opts) {
   if (!(this instanceof Router)) {
     return new Router(opts);
@@ -29,7 +30,7 @@ function Router(opts) {
   this.params = {};
   this.stack = [];
 };
- methods.forEach(function (method) {
+methods.forEach(function (method) {
   Router.prototype[method] = function (name, path, middleware) {
     var middleware;
 
@@ -83,7 +84,10 @@ Router.prototype.use = function () {
         });
       }
     } else {
-      router.register(path || '(.*)', [], m, { end: false, ignoreCaptures: !hasPath });
+      router.register(path || '(.*)', [], m, {
+        end: false,
+        ignoreCaptures: !hasPath
+      });
     }
   });
 
@@ -100,13 +104,20 @@ Router.prototype.prefix = function (prefix) {
 
   return this;
 };
+/**
+ * 1，routes 返回一个koa 的中间件 dispatch方法就是一个中间件，
+ * 2， koa 所有的请求，先执行所有的中间件，所以也会先执行这个dispath.
+ * 3,
+ */
 Router.prototype.routes = Router.prototype.middleware = function () {
   var router = this;
-  debugger
+  // debugger
+  
   var dispatch = function dispatch(ctx, next) {
     debug('%s %s', ctx.method, ctx.path);
-
+    // 获取path 和method 
     var path = router.opts.routerPath || ctx.routerPath || ctx.path;
+    // 通过match 去查找匹配的路由
     var matched = router.match(path, ctx.method);
     var layerChain, layer, i;
 
@@ -117,7 +128,7 @@ Router.prototype.routes = Router.prototype.middleware = function () {
     }
 
     ctx.router = router;
-
+    // 如果不存在路由就直接执行下一个next 中间件
     if (!matched.route) return next();
 
     var matchedLayers = matched.pathAndMethod
@@ -127,8 +138,8 @@ Router.prototype.routes = Router.prototype.middleware = function () {
       ctx._matchedRouteName = mostSpecificLayer.name;
     }
 
-    layerChain = matchedLayers.reduce(function(memo, layer) {
-      memo.push(function(ctx, next) {
+    layerChain = matchedLayers.reduce(function (memo, layer) {
+      memo.push(function (ctx, next) {
         ctx.captures = layer.captures(path, ctx.captures);
         ctx.params = layer.params(path, ctx.captures, ctx.params);
         ctx.routerName = layer.name;
@@ -136,7 +147,7 @@ Router.prototype.routes = Router.prototype.middleware = function () {
       });
       return memo.concat(layer.stack);
     }, []);
-    debugger
+    // debugger
     return compose(layerChain)(ctx, next);
   };
 
@@ -149,7 +160,7 @@ Router.prototype.allowedMethods = function (options) {
   var implemented = this.methods;
 
   return function allowedMethods(ctx, next) {
-    return next().then(function() {
+    return next().then(function () {
       var allowed = {};
 
       if (!ctx.status || ctx.status === 404) {
@@ -272,7 +283,7 @@ Router.prototype.register = function (path, methods, middleware, opts) {
 Router.prototype.route = function (name) {
   var routes = this.stack;
 
-  for (var len = routes.length, i=0; i<len; i++) {
+  for (var len = routes.length, i = 0; i < len; i++) {
     if (routes[i].name && routes[i].name === name) {
       return routes[i];
     }
@@ -354,6 +365,8 @@ Router.prototype.param = function (param, middleware) {
   return this;
 };
 Router.url = function (path, params) {
-    var args = Array.prototype.slice.call(arguments, 1);
-    return Layer.prototype.url.apply({ path: path }, args);
+  var args = Array.prototype.slice.call(arguments, 1);
+  return Layer.prototype.url.apply({
+    path: path
+  }, args);
 };
