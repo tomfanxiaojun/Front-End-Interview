@@ -6,7 +6,7 @@
  */
 
 var debug = require('debug')('koa-router');
-var compose = require('koa-compose');
+var compose = require('../../koa/lib/compose');
 var HttpError = require('http-errors');
 var methods = require('methods');
 var Layer = require('./layer');
@@ -41,7 +41,7 @@ methods.forEach(function (method) {
       path = name;
       name = null;
     }
-
+    // 只是注册了相应的路由，回调函数就是一个中间件， 每个路由生成了一个Layer的对象
     this.register(path, [method], middleware, {
       name: name
     });
@@ -49,6 +49,44 @@ methods.forEach(function (method) {
     return this;
   };
 });
+// Router.prototype.all 调用Register方法，methods 传入的是一个数组
+Router.prototype.register = function (path, methods, middleware, opts) {
+  opts = opts || {};
+  var router = this;
+  var stack = this.stack;
+
+  // support array of paths
+  if (Array.isArray(path)) {
+    path.forEach(function (p) {
+      router.register.call(router, p, methods, middleware, opts);
+    });
+
+    return this;
+  }
+
+  // 创建一个Layer ,保存在Router 的实例对象的Stack 上面。
+  var route = new Layer(path, methods, middleware, {
+    end: opts.end === false ? opts.end : true,
+    name: opts.name,
+    sensitive: opts.sensitive || this.opts.sensitive || false,
+    strict: opts.strict || this.opts.strict || false,
+    prefix: opts.prefix || this.opts.prefix || "",
+    ignoreCaptures: opts.ignoreCaptures
+  });
+
+  if (this.opts.prefix) {
+    route.setPrefix(this.opts.prefix);
+  }
+
+  // 给中间件添加参数
+  Object.keys(this.params).forEach(function (param) {
+    route.param(param, this.params[param]);
+  }, this);
+  // 将生成的Layer 保存在Stack 上面
+  stack.push(route);
+
+  return route;
+};
 // Alias for `router.delete()` because delete is a reserved word
 Router.prototype.del = Router.prototype['delete'];
 Router.prototype.use = function () {
@@ -119,7 +157,14 @@ Router.prototype.routes = Router.prototype.middleware = function () {
     var path = router.opts.routerPath || ctx.routerPath || ctx.path;
     // 通过match 去查找匹配的路由
     var matched = router.match(path, ctx.method);
-    var layerChain, layer, i;
+    /**
+     *  var matched = {
+          path: [],
+          pathAndMethod: [],
+          route: false
+        };
+     */
+    var layerChain;
 
     if (ctx.matched) {
       ctx.matched.push.apply(ctx.matched, matched.path);
@@ -131,7 +176,7 @@ Router.prototype.routes = Router.prototype.middleware = function () {
     // 如果不存在路由就直接执行下一个next 中间件
     if (!matched.route) return next();
 
-    var matchedLayers = matched.pathAndMethod
+    var matchedLayers = matched.pathAndMethod// pathAndMethod 保存的所有匹配的Layer
     var mostSpecificLayer = matchedLayers[matchedLayers.length - 1]
     ctx._matchedRoute = mostSpecificLayer.path;
     if (mostSpecificLayer.name) {
@@ -139,15 +184,17 @@ Router.prototype.routes = Router.prototype.middleware = function () {
     }
 
     layerChain = matchedLayers.reduce(function (memo, layer) {
+      //每个Router 中间件执行之前，先执行一个默认的中间件，将对应的Router的参数保存在ctx 上下文中。
       memo.push(function (ctx, next) {
         ctx.captures = layer.captures(path, ctx.captures);
         ctx.params = layer.params(path, ctx.captures, ctx.params);
         ctx.routerName = layer.name;
         return next();
       });
+      // layer.stack 保存的是对应路由的中间件，也就是对应的路由的回调函数
       return memo.concat(layer.stack);
     }, []);
-    // debugger
+    // 执行对应的Router 的回调函数(中间件)
     return compose(layerChain)(ctx, next);
   };
 
@@ -242,44 +289,7 @@ Router.prototype.redirect = function (source, destination, code) {
     ctx.status = code || 301;
   });
 };
-Router.prototype.register = function (path, methods, middleware, opts) {
-  opts = opts || {};
 
-  var router = this;
-  var stack = this.stack;
-
-  // support array of paths
-  if (Array.isArray(path)) {
-    path.forEach(function (p) {
-      router.register.call(router, p, methods, middleware, opts);
-    });
-
-    return this;
-  }
-
-  // create route
-  var route = new Layer(path, methods, middleware, {
-    end: opts.end === false ? opts.end : true,
-    name: opts.name,
-    sensitive: opts.sensitive || this.opts.sensitive || false,
-    strict: opts.strict || this.opts.strict || false,
-    prefix: opts.prefix || this.opts.prefix || "",
-    ignoreCaptures: opts.ignoreCaptures
-  });
-
-  if (this.opts.prefix) {
-    route.setPrefix(this.opts.prefix);
-  }
-
-  // add parameter middleware
-  Object.keys(this.params).forEach(function (param) {
-    route.param(param, this.params[param]);
-  }, this);
-
-  stack.push(route);
-
-  return route;
-};
 Router.prototype.route = function (name) {
   var routes = this.stack;
 
@@ -314,7 +324,7 @@ Router.prototype.match = function (path, method) {
     layer = layers[i];
 
     debug('test %s %s', layer.path, layer.regexp);
-
+    // 正则匹配
     if (layer.match(path)) {
       matched.path.push(layer);
 

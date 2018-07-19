@@ -31,8 +31,8 @@ function compose (middleware) {
 
   return function (context, next) {
     // last called middleware #
-    let index = -1
-    return dispatch(0)// 自执行第一个中间件
+    let index = -1;
+    return dispatch(0); // 自执行第一个中间件
     function dispatch (i) {
       if (i <= index) return Promise.reject(new Error('next() called multiple times'))
       index = i

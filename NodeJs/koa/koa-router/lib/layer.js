@@ -23,8 +23,10 @@ function Layer(path, methods, middleware, opts) {
   this.name = this.opts.name || null;
   this.methods = [];
   this.paramNames = [];
+  // 中间件，保存在Stack中
   this.stack = Array.isArray(middleware) ? middleware : [middleware];
 
+  // 将methods 保存起来
   methods.forEach(function(method) {
     var l = this.methods.push(method.toUpperCase());
     if (this.methods[l-1] === 'GET') {
