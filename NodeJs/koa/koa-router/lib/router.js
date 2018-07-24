@@ -6,6 +6,7 @@
  */
 
 var debug = require('debug')('koa-router');
+debug.enabled  = true;
 var compose = require('../../koa/lib/compose');
 var HttpError = require('http-errors');
 var methods = require('methods');

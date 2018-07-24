@@ -1,4 +1,5 @@
 var debug = require('debug')('koa-router');
+debug.enabled  = true;
 var pathToRegExp = require('path-to-regexp');
 var uri = require('urijs');
 
@@ -46,8 +47,9 @@ function Layer(path, methods, middleware, opts) {
   }, this);
 
   this.path = path;
+  // 正则匹配生成的地方
   this.regexp = pathToRegExp(path, this.paramNames, this.opts);
-
+  debug(this.regexp.source)
   debug('defined route %s %s', this.methods, this.opts.prefix + this.path);
 };
 

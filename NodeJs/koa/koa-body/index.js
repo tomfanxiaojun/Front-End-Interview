@@ -1,34 +1,7 @@
-/**
- * koa-body - index.js
- * Copyright(c) 2014
- * MIT Licensed
- *
- * @author  Daryl Lau (@dlau)
- * @author  Charlike Mike Reagent (@tunnckoCore)
- * @api private
- */
-
-'use strict';
-
-/**
- * Module dependencies.
- */
-
 var buddy = require('co-body');
 var forms = require('formidable');
-
-/**
- * Expose `requestbody()`.
- */
-
 module.exports = requestbody;
 
-/**
- *
- * @param {Object} options
- * @see https://github.com/dlau/koa-body
- * @api public
- */
 function requestbody(opts) {
   opts = opts || {};
   opts.onError = 'onError' in opts ? opts.onError : false;
@@ -112,26 +85,10 @@ function requestbody(opts) {
   };
 }
 
-/**
- * Check if multipart handling is enabled and that this is a multipart request
- *
- * @param  {Object} ctx
- * @param  {Object} opts
- * @return {Boolean} true if request is multipart and being treated as so
- * @api private
- */
 function isMultiPart(ctx, opts) {
   return opts.multipart && ctx.is('multipart');
 }
 
-/**
- * Donable formidable
- *
- * @param  {Stream} ctx
- * @param  {Object} opts
- * @return {Promise}
- * @api private
- */
 function formy(ctx, opts) {
   return new Promise(function (resolve, reject) {
     var fields = {};

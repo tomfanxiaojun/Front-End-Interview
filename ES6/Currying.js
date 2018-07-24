@@ -1,6 +1,7 @@
 const sum = (a, b) => a + b;
 
 sum(2, 3)
+
 // => 6
 
 const curriedSum = (a) => ((b) => a + b);

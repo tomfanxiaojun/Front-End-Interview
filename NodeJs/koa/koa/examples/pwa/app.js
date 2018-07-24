@@ -1,8 +1,8 @@
 const util = require('./util');
 const Koa = require('../../');
 const serve = require('koa-static');
-const Router = require('koa-router');
-const koaBody = require('koa-body');
+const Router = require('../../../koa-router');
+const koaBody = require('../../../koa-body');
 const webpush = require('web-push');
 
 const port = process.env.PORT || 8085;

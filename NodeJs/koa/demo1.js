@@ -36,6 +36,12 @@ router.get('/a',async (ctx, next) => {
   //   status: '200'
   // };
 })
+router.get('/a/:id',async (ctx, next) => {
+  ctx.body = 'Index Page A';
+  // ctx.response.body = {
+  //   status: '200'
+  // };
+})
 router.get('/b',async (ctx, next) => {
   ctx.body = 'Index Page B';
   // ctx.response.body = {
