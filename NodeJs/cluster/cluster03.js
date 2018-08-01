@@ -5,7 +5,7 @@ var numCPUs = require('os').cpus().length;
 if (cluster.isMaster) {
     console.log('[master] ' + "start master...");
 
-    for (var i = 0; i < numCPUs; i++) {
+    for (var i = 0; i < 2; i++) {
         var wk = cluster.fork();
         wk.send('[master] ' + 'hi worker' + wk.id);
     }
@@ -36,20 +36,23 @@ if (cluster.isMaster) {
         }
     }
 
-    setTimeout(function() {
+    setInterval(function() {
         eachWorker(function(worker) {
             worker.send('[master] ' + 'send message to worker' + worker.id);
         });
-    }, 3000);
+    }, 5000);
 
     Object.keys(cluster.workers).forEach(function(id) {
         cluster.workers[id].on('message', function(msg) {
             console.log('[master] ' + 'message ' + msg);
         });
     });
+    cluster.on('message', () => {
+      console.log('[master] worker');
+    })
 
 } else if (cluster.isWorker) {
-    console.log('[worker] ' + "start worker ..." + cluster.worker.id);
+    console.log('[---worker] ' + "start worker ..." + cluster.worker.id);
 
     process.on('message', function(msg) {
         console.log('[worker] ' + msg);
